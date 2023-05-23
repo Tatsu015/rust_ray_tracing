@@ -1,3 +1,5 @@
+use std::io::Write;
+
 fn main() {
     const WIDTH: i32 = 256;
     const HEIGHT: i32 = 256;
@@ -5,6 +7,8 @@ fn main() {
     println!("P3\n{} {}\n255", WIDTH, HEIGHT);
 
     for i in (0..HEIGHT).rev() {
+        eprint!("\rremain {}", i);
+        std::io::stdout().flush().unwrap();
         for j in 0..WIDTH {
             let r: f64 = f64::from(j) / f64::from(WIDTH - 1);
             let g: f64 = f64::from(i) / f64::from(HEIGHT - 1);
@@ -17,4 +21,5 @@ fn main() {
             println!("{} {} {}", ir, ig, ib);
         }
     }
+    eprintln!("DONE");
 }
