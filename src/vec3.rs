@@ -41,25 +41,28 @@ impl ops::Sub<Vec3> for Vec3 {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use crate::vec3::Vec3;
-//     use assert_float_eq::assert_f64_near;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//     #[test]
-//     fn test_add() {
-//         let v1 = Vec3 {
-//             x: 1.1,
-//             y: 2.2,
-//             z: 3.3,
-//         };
-//         let v2 = Vec3 {
-//             x: 4.4,
-//             y: 5.5,
-//             z: 6.6,
-//         };
+    const EPSILON: f64 = 0.000001;
 
-//         let ans = v1 + v2;
-//         assert_f64_near!(ans.x, 5.5, abs <= f64::EPSILON);
-//     }
-// }
+    #[test]
+    fn test_add() {
+        let v1 = Vec3 {
+            x: 1.1,
+            y: 2.2,
+            z: 3.3,
+        };
+        let v2 = Vec3 {
+            x: 4.4,
+            y: 5.5,
+            z: 6.6,
+        };
+
+        let ans = v1 + v2;
+        assert!((ans.x - 5.5).abs() <= EPSILON);
+        assert!((ans.y - 7.7).abs() <= EPSILON);
+        assert!((ans.z - 9.9).abs() <= EPSILON);
+    }
+}
