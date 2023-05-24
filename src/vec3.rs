@@ -1,6 +1,6 @@
 use std::ops;
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Clone, Copy, Debug)]
 pub struct Vec3 {
     x: f64,
     y: f64,
@@ -64,5 +64,29 @@ mod tests {
         assert!((ans.x - 5.5).abs() <= EPSILON);
         assert!((ans.y - 7.7).abs() <= EPSILON);
         assert!((ans.z - 9.9).abs() <= EPSILON);
+    }
+
+    #[test]
+    fn test_sub() {
+        let v1 = Vec3 {
+            x: 1.1,
+            y: 2.2,
+            z: 6.6,
+        };
+        let v2 = Vec3 {
+            x: 4.4,
+            y: 2.2,
+            z: 2.2,
+        };
+
+        let ans1 = v1 - v2;
+        assert!((ans1.x + 3.3).abs() <= EPSILON);
+        assert!((ans1.y).abs() <= EPSILON);
+        assert!((ans1.z - 4.4).abs() <= EPSILON);
+
+        let ans2 = v2 - v1;
+        assert!((ans2.x - 3.3).abs() <= EPSILON);
+        assert!((ans2.y).abs() <= EPSILON);
+        assert!((ans2.z + 4.4).abs() <= EPSILON);
     }
 }
