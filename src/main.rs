@@ -16,11 +16,11 @@ fn main() {
         eprint!("\rremain {}", i);
         std::io::stdout().flush().unwrap();
         for j in 0..WIDTH {
-            let r: f64 = f64::from(j) / f64::from(WIDTH - 1);
-            let g: f64 = f64::from(i) / f64::from(HEIGHT - 1);
-            let b: f64 = 0.25;
-
-            let c = Vec3 { x: r, y: g, z: b };
+            let c = Vec3 {
+                x: f64::from(j) / f64::from(WIDTH - 1),
+                y: f64::from(i) / f64::from(HEIGHT - 1),
+                z: 0.25,
+            };
             write_color(c);
         }
     }
