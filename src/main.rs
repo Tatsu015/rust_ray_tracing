@@ -1,3 +1,9 @@
+mod color;
+mod vec3;
+
+use color::write_color;
+use vec3::Vec3;
+
 use std::io::Write;
 
 fn main() {
@@ -14,11 +20,8 @@ fn main() {
             let g: f64 = f64::from(i) / f64::from(HEIGHT - 1);
             let b: f64 = 0.25;
 
-            let ir = (256.0 * r).floor();
-            let ig = (256.0 * g).floor();
-            let ib = (256.0 * b).floor();
-
-            println!("{} {} {}", ir, ig, ib);
+            let c = Vec3 { x: r, y: g, z: b };
+            write_color(c);
         }
     }
     eprintln!("DONE");
