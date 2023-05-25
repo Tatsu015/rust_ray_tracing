@@ -7,6 +7,9 @@ pub struct Vec3 {
     z: f64,
 }
 
+pub type Color = Vec3;
+pub type Point = Vec3;
+
 impl Vec3 {
     fn length_double(&self) -> f64 {
         return self.x * self.x + self.y * self.y + self.z * self.z;
