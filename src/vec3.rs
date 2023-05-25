@@ -15,6 +15,18 @@ impl Vec3 {
     fn length(&self) -> f64 {
         return self.length_double().sqrt();
     }
+
+    fn dot(lhs: Vec3, rhs: Vec3) -> f64 {
+        return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
+    }
+
+    fn cross(lhs: Vec3, rhs: Vec3) -> Vec3 {
+        return Vec3 {
+            x: lhs.y - rhs.z,
+            y: lhs.z - rhs.x,
+            z: lhs.x - rhs.y,
+        };
+    }
 }
 
 impl ops::Add<Vec3> for Vec3 {
@@ -114,6 +126,60 @@ mod tests {
     use super::*;
 
     const EPSILON: f64 = 0.000001;
+
+    #[test]
+    fn test_length() {
+        let v1 = Vec3 {
+            x: 1.0,
+            y: 2.0,
+            z: 3.0,
+        };
+
+        let v2 = Vec3 {
+            x: -1.0,
+            y: -2.0,
+            z: -3.0,
+        };
+
+        assert!((v1.length() * v1.length() - 14.0).abs() < EPSILON);
+        assert!((v2.length() * v2.length() - 14.0).abs() < EPSILON);
+    }
+
+    #[test]
+    fn test_dot() {
+        let v1 = Vec3 {
+            x: 1.0,
+            y: 2.0,
+            z: 3.0,
+        };
+        let v2 = Vec3 {
+            x: 2.0,
+            y: 3.0,
+            z: 4.0,
+        };
+
+        assert!(Vec3::dot(v1, v2) - 20.0 <= EPSILON);
+    }
+
+    #[test]
+    fn test_cross() {
+        let v1 = Vec3 {
+            x: 1.0,
+            y: 0.0,
+            z: 0.0,
+        };
+        let v2 = Vec3 {
+            x: 0.0,
+            y: 1.0,
+            z: 0.0,
+        };
+
+        let ans = Vec3::cross(v1, v2);
+
+        assert!(ans.x <= EPSILON);
+        assert!(ans.y <= EPSILON);
+        assert!(ans.z - 1.0 <= EPSILON);
+    }
 
     #[test]
     fn test_add() {
