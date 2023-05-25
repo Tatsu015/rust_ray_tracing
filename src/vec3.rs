@@ -53,6 +53,18 @@ impl ops::Mul<f64> for Vec3 {
     }
 }
 
+impl ops::Div<f64> for Vec3 {
+    type Output = Vec3;
+
+    fn div(self, rhs: f64) -> Vec3 {
+        return Vec3 {
+            x: self.x / rhs,
+            y: self.y / rhs,
+            z: self.z / rhs,
+        };
+    }
+}
+
 impl ops::Mul<Vec3> for f64 {
     type Output = Vec3;
 
@@ -78,6 +90,22 @@ impl ops::SubAssign<Vec3> for Vec3 {
         self.x -= rhs.x;
         self.y -= rhs.y;
         self.z -= rhs.z;
+    }
+}
+
+impl ops::MulAssign<f64> for Vec3 {
+    fn mul_assign(&mut self, rhs: f64) {
+        self.x *= rhs;
+        self.y *= rhs;
+        self.z *= rhs;
+    }
+}
+
+impl ops::DivAssign<f64> for Vec3 {
+    fn div_assign(&mut self, rhs: f64) {
+        self.x /= rhs;
+        self.y /= rhs;
+        self.z /= rhs;
     }
 }
 
@@ -150,6 +178,20 @@ mod tests {
     }
 
     #[test]
+    fn test_div() {
+        let v1 = Vec3 {
+            x: 1.1,
+            y: 2.2,
+            z: 3.3,
+        };
+
+        let ans1 = v1 / 2.0;
+        assert!((ans1.x - 0.55).abs() <= EPSILON);
+        assert!((ans1.y - 1.1).abs() <= EPSILON);
+        assert!((ans1.z - 1.65).abs() <= EPSILON);
+    }
+
+    #[test]
     fn test_add_assign() {
         let v1 = Vec3 {
             x: 1.0,
@@ -163,7 +205,6 @@ mod tests {
         };
 
         ans += v1;
-
         assert!((ans.x - 5.0) <= EPSILON);
         assert!((ans.y - 7.0) <= EPSILON);
         assert!((ans.z - 9.0) <= EPSILON);
@@ -187,5 +228,35 @@ mod tests {
         assert!((ans.x - 3.3) <= EPSILON);
         assert!((ans.y) <= EPSILON);
         assert!((ans.z + 4.4) <= EPSILON);
+    }
+
+    #[test]
+    fn test_mul_assign() {
+        let mut ans = Vec3 {
+            x: 1.1,
+            y: 2.2,
+            z: 3.3,
+        };
+
+        ans *= 2.0;
+
+        assert!((ans.x - 2.2) <= EPSILON);
+        assert!((ans.y - 4.4) <= EPSILON);
+        assert!((ans.z - 6.6) <= EPSILON);
+    }
+
+    #[test]
+    fn test_div_assign() {
+        let mut ans = Vec3 {
+            x: 1.1,
+            y: 2.2,
+            z: 3.3,
+        };
+
+        ans /= 2.0;
+
+        assert!((ans.x - 0.55) <= EPSILON);
+        assert!((ans.y - 1.1) <= EPSILON);
+        assert!((ans.z - 1.65) <= EPSILON);
     }
 }
