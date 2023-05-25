@@ -27,6 +27,10 @@ impl Vec3 {
             z: lhs.x - rhs.y,
         };
     }
+
+    fn unit_vector(v: Vec3) -> Vec3 {
+        return v / v.length();
+    }
 }
 
 impl ops::Add<Vec3> for Vec3 {
@@ -179,6 +183,21 @@ mod tests {
         assert!(ans.x <= EPSILON);
         assert!(ans.y <= EPSILON);
         assert!(ans.z - 1.0 <= EPSILON);
+    }
+
+    #[test]
+    fn test_unit_vector() {
+        let v1 = Vec3 {
+            x: 2.0,
+            y: 0.0,
+            z: 0.0,
+        };
+
+        let ans = Vec3::unit_vector(v1);
+
+        assert!(ans.x - 1.0 <= EPSILON);
+        assert!(ans.y <= EPSILON);
+        assert!(ans.z <= EPSILON);
     }
 
     #[test]
