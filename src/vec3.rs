@@ -11,27 +11,27 @@ pub type Color = Vec3;
 pub type Point = Vec3;
 
 impl Vec3 {
-    fn length_double(&self) -> f64 {
+    pub fn length_double(&self) -> f64 {
         return self.x * self.x + self.y * self.y + self.z * self.z;
     }
 
-    fn length(&self) -> f64 {
+    pub fn length(&self) -> f64 {
         return self.length_double().sqrt();
     }
 
-    fn new(x: f64, y: f64, z: f64) -> Vec3 {
+    pub fn new(x: f64, y: f64, z: f64) -> Vec3 {
         return Vec3 { x, y, z };
     }
 
-    fn dot(lhs: Vec3, rhs: Vec3) -> f64 {
+    pub fn dot(lhs: Vec3, rhs: Vec3) -> f64 {
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
     }
 
-    fn cross(lhs: Vec3, rhs: Vec3) -> Vec3 {
+    pub fn cross(lhs: Vec3, rhs: Vec3) -> Vec3 {
         return Vec3::new(lhs.y - rhs.z, lhs.z - rhs.x, lhs.x - rhs.y);
     }
 
-    fn unit_vector(v: Vec3) -> Vec3 {
+    pub fn unit_vector(v: Vec3) -> Vec3 {
         return v / v.length();
     }
 }
