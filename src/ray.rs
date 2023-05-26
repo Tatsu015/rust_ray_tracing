@@ -1,6 +1,6 @@
 use crate::vec3::{Point, Vec3};
 
-struct Ray {
+pub struct Ray {
     pub org: Vec3,
     pub dir: Vec3,
 }
