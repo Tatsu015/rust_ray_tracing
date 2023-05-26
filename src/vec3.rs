@@ -19,16 +19,16 @@ impl Vec3 {
         return self.length_double().sqrt();
     }
 
+    fn new(x: f64, y: f64, z: f64) -> Vec3 {
+        return Vec3 { x, y, z };
+    }
+
     fn dot(lhs: Vec3, rhs: Vec3) -> f64 {
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
     }
 
     fn cross(lhs: Vec3, rhs: Vec3) -> Vec3 {
-        return Vec3 {
-            x: lhs.y - rhs.z,
-            y: lhs.z - rhs.x,
-            z: lhs.x - rhs.y,
-        };
+        return Vec3::new(lhs.y - rhs.z, lhs.z - rhs.x, lhs.x - rhs.y);
     }
 
     fn unit_vector(v: Vec3) -> Vec3 {
@@ -40,11 +40,7 @@ impl ops::Add<Vec3> for Vec3 {
     type Output = Vec3;
 
     fn add(self, rhs: Vec3) -> Vec3 {
-        return Vec3 {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-            z: self.z + rhs.z,
-        };
+        return Vec3::new(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z);
     }
 }
 
@@ -52,11 +48,7 @@ impl ops::Sub<Vec3> for Vec3 {
     type Output = Vec3;
 
     fn sub(self, rhs: Vec3) -> Vec3 {
-        return Vec3 {
-            x: self.x - rhs.x,
-            y: self.y - rhs.y,
-            z: self.z - rhs.z,
-        };
+        return Vec3::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z);
     }
 }
 
@@ -64,11 +56,7 @@ impl ops::Mul<f64> for Vec3 {
     type Output = Vec3;
 
     fn mul(self, rhs: f64) -> Vec3 {
-        return Vec3 {
-            x: self.x * rhs,
-            y: self.y * rhs,
-            z: self.z * rhs,
-        };
+        return Vec3::new(self.x * rhs, self.y * rhs, self.z * rhs);
     }
 }
 
@@ -76,11 +64,7 @@ impl ops::Div<f64> for Vec3 {
     type Output = Vec3;
 
     fn div(self, rhs: f64) -> Vec3 {
-        return Vec3 {
-            x: self.x / rhs,
-            y: self.y / rhs,
-            z: self.z / rhs,
-        };
+        return Vec3::new(self.x / rhs, self.y / rhs, self.z / rhs);
     }
 }
 
@@ -88,11 +72,7 @@ impl ops::Mul<Vec3> for f64 {
     type Output = Vec3;
 
     fn mul(self, rhs: Vec3) -> Vec3 {
-        return Vec3 {
-            x: rhs.x * self,
-            y: rhs.y * self,
-            z: rhs.z * self,
-        };
+        return Vec3::new(rhs.x * self, rhs.y * self, rhs.z * self);
     }
 }
 
@@ -136,17 +116,9 @@ mod tests {
 
     #[test]
     fn test_length() {
-        let v1 = Vec3 {
-            x: 1.0,
-            y: 2.0,
-            z: 3.0,
-        };
+        let v1 = Vec3::new(1.0, 2.0, 3.0);
 
-        let v2 = Vec3 {
-            x: -1.0,
-            y: -2.0,
-            z: -3.0,
-        };
+        let v2 = Vec3::new(-1.0, -2.0, -3.0);
 
         assert!((v1.length() * v1.length() - 14.0).abs() < EPSILON);
         assert!((v2.length() * v2.length() - 14.0).abs() < EPSILON);
@@ -154,32 +126,16 @@ mod tests {
 
     #[test]
     fn test_dot() {
-        let v1 = Vec3 {
-            x: 1.0,
-            y: 2.0,
-            z: 3.0,
-        };
-        let v2 = Vec3 {
-            x: 2.0,
-            y: 3.0,
-            z: 4.0,
-        };
+        let v1 = Vec3::new(1.0, 2.0, 3.0);
+        let v2 = Vec3::new(2.0, 3.0, 4.0);
 
         assert!(Vec3::dot(v1, v2) - 20.0 <= EPSILON);
     }
 
     #[test]
     fn test_cross() {
-        let v1 = Vec3 {
-            x: 1.0,
-            y: 0.0,
-            z: 0.0,
-        };
-        let v2 = Vec3 {
-            x: 0.0,
-            y: 1.0,
-            z: 0.0,
-        };
+        let v1 = Vec3::new(1.0, 0.0, 0.0);
+        let v2 = Vec3::new(0.0, 1.0, 0.0);
 
         let ans = Vec3::cross(v1, v2);
 
@@ -190,11 +146,7 @@ mod tests {
 
     #[test]
     fn test_unit_vector() {
-        let v1 = Vec3 {
-            x: 2.0,
-            y: 0.0,
-            z: 0.0,
-        };
+        let v1 = Vec3::new(2.0, 0.0, 0.0);
 
         let ans = Vec3::unit_vector(v1);
 
@@ -205,16 +157,8 @@ mod tests {
 
     #[test]
     fn test_add() {
-        let v1 = Vec3 {
-            x: 1.1,
-            y: 2.2,
-            z: 3.3,
-        };
-        let v2 = Vec3 {
-            x: 4.4,
-            y: 5.5,
-            z: 6.6,
-        };
+        let v1 = Vec3::new(1.1, 2.2, 3.3);
+        let v2 = Vec3::new(4.4, 5.5, 6.6);
 
         let ans = v1 + v2;
         assert!((ans.x - 5.5).abs() <= EPSILON);
@@ -224,16 +168,8 @@ mod tests {
 
     #[test]
     fn test_sub() {
-        let v1 = Vec3 {
-            x: 1.1,
-            y: 2.2,
-            z: 6.6,
-        };
-        let v2 = Vec3 {
-            x: 4.4,
-            y: 2.2,
-            z: 2.2,
-        };
+        let v1 = Vec3::new(1.1, 2.2, 6.6);
+        let v2 = Vec3::new(4.4, 2.2, 2.2);
 
         let ans1 = v1 - v2;
         assert!((ans1.x + 3.3).abs() <= EPSILON);
@@ -248,11 +184,7 @@ mod tests {
 
     #[test]
     fn test_mul() {
-        let v1 = Vec3 {
-            x: 1.1,
-            y: 2.2,
-            z: 3.3,
-        };
+        let v1 = Vec3::new(1.1, 2.2, 3.3);
 
         let ans1 = v1 * 2.0;
         assert!((ans1.x - 2.2).abs() <= EPSILON);
@@ -267,11 +199,7 @@ mod tests {
 
     #[test]
     fn test_div() {
-        let v1 = Vec3 {
-            x: 1.1,
-            y: 2.2,
-            z: 3.3,
-        };
+        let v1 = Vec3::new(1.1, 2.2, 3.3);
 
         let ans1 = v1 / 2.0;
         assert!((ans1.x - 0.55).abs() <= EPSILON);
@@ -281,16 +209,8 @@ mod tests {
 
     #[test]
     fn test_add_assign() {
-        let v1 = Vec3 {
-            x: 1.0,
-            y: 2.0,
-            z: 3.0,
-        };
-        let mut ans = Vec3 {
-            x: 4.0,
-            y: 5.0,
-            z: 6.0,
-        };
+        let v1 = Vec3::new(1.0, 2.0, 3.0);
+        let mut ans = Vec3::new(4.0, 5.0, 6.0);
 
         ans += v1;
         assert!((ans.x - 5.0) <= EPSILON);
@@ -300,16 +220,8 @@ mod tests {
 
     #[test]
     fn test_sub_assign() {
-        let v1 = Vec3 {
-            x: 1.1,
-            y: 2.2,
-            z: 6.6,
-        };
-        let mut ans = Vec3 {
-            x: 4.4,
-            y: 2.2,
-            z: 2.2,
-        };
+        let v1 = Vec3::new(1.1, 2.2, 6.6);
+        let mut ans = Vec3::new(4.4, 2.2, 2.2);
 
         ans -= v1;
 
@@ -320,11 +232,7 @@ mod tests {
 
     #[test]
     fn test_mul_assign() {
-        let mut ans = Vec3 {
-            x: 1.1,
-            y: 2.2,
-            z: 3.3,
-        };
+        let mut ans = Vec3::new(1.1, 2.2, 3.3);
 
         ans *= 2.0;
 
@@ -335,11 +243,7 @@ mod tests {
 
     #[test]
     fn test_div_assign() {
-        let mut ans = Vec3 {
-            x: 1.1,
-            y: 2.2,
-            z: 3.3,
-        };
+        let mut ans = Vec3::new(1.1, 2.2, 3.3);
 
         ans /= 2.0;
 
