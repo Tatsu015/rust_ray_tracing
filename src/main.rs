@@ -2,7 +2,7 @@ mod color;
 mod vec3;
 
 use color::write_color;
-use vec3::Vec3;
+use vec3::Color;
 
 use std::io::Write;
 
@@ -16,7 +16,7 @@ fn main() {
         eprint!("\rremain {}", i);
         std::io::stdout().flush().unwrap();
         for j in 0..WIDTH {
-            let c = Vec3 {
+            let c: Color = Color {
                 x: f64::from(j) / f64::from(WIDTH - 1),
                 y: f64::from(i) / f64::from(HEIGHT - 1),
                 z: 0.25,
