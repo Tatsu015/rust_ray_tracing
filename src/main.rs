@@ -44,7 +44,7 @@ fn main() {
 
     let org = Vec3::new(0.0, 0.0, 0.0);
     let horizontal = Vec3::new(viewport_width, 0.0, 0.0);
-    let vertical = Vec3::new(0.0, viewport_width, 0.0);
+    let vertical = Vec3::new(0.0, viewport_height, 0.0);
     let focal_center = Vec3::new(0.0, 0.0, focal_length);
     let lower_left_corner = org - horizontal / 2.0 - vertical / 2.0 - focal_center;
 
@@ -62,4 +62,35 @@ fn main() {
         }
     }
     eprintln!("DONE");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_hit_sphere() {
+        let org = Vec3::new(0.0, 0.0, 0.0);
+        let sphere_ray_hit = Vec3::new(0.0, 0.0, 1.0);
+        let sphere_ray_hit_limit = Vec3::new(0.0, 0.0, 1.4);
+        let sphere_ray_not_hit = Vec3::new(0.0, 0.0, 1.5);
+        let radius = 1.0;
+
+        let r_xz = Ray::new(org, Vec3::new(1.0, 0.0, 1.0));
+
+        let sut = hit_sphere(sphere_ray_hit, radius, r_xz);
+        assert_eq!(sut, true);
+        let sut = hit_sphere(sphere_ray_hit_limit, radius, r_xz);
+        assert_eq!(sut, true);
+        let sut = hit_sphere(sphere_ray_not_hit, radius, r_xz);
+        assert_eq!(sut, false);
+
+        let r_yz = Ray::new(org, Vec3::new(0.0, 1.0, 1.0));
+
+        let sut = hit_sphere(sphere_ray_hit, radius, r_yz);
+        assert_eq!(sut, true);
+        let sut = hit_sphere(sphere_ray_hit_limit, radius, r_yz);
+        assert_eq!(sut, true);
+        let sut = hit_sphere(sphere_ray_not_hit, radius, r_yz);
+        assert_eq!(sut, false);
+    }
 }
