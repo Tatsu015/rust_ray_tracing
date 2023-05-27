@@ -5,15 +5,32 @@ mod vec3;
 use color::write_color;
 use ray::Ray;
 use std::io::Write;
-use vec3::{Color, Vec3};
+use vec3::{Color, Point, Vec3};
 
 fn ray_color(ray: Ray) -> Color {
+    if hit_sphere(Vec3::new(0.0, 0.0, 0.0), 0.5, ray) {
+        return Color::new(1.0, 0.0, 0.0);
+    }
+
     let white: Color = Color::new(1.0, 1.0, 1.0);
     let blue: Color = Color::new(0.5, 0.7, 1.0);
 
     let unit_dir = Vec3::unit_vector(ray.dir);
     let t = 0.5 * (unit_dir.y + 1.0);
     return (1.0 - t) * white + t * blue;
+}
+
+fn hit_sphere(center: Point, radius: f64, r: Ray) -> bool {
+    let oc = r.org - center;
+    let a = Vec3::dot(r.dir, r.dir);
+    let b = Vec3::dot(r.dir, oc);
+    let c = Vec3::dot(oc, oc) - radius * radius;
+    let d = b * b - a * c;
+
+    if d > 0.0 {
+        return true;
+    }
+    return false;
 }
 
 fn main() {
