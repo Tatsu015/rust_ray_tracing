@@ -13,7 +13,12 @@ use vec3::{Color, Vec3};
 
 fn ray_color(ray: &Ray) -> Color {
     let center = Vec3::new(0.0, 0.0, -1.0);
-    let mut record = HitRecord::new(Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 0.0), 0.0);
+    let mut record = HitRecord::new(
+        Vec3::new(0.0, 0.0, 0.0),
+        Vec3::new(0.0, 0.0, 0.0),
+        0.0,
+        false,
+    );
     let sphere = Sphere::new(center, 0.5);
     if sphere.hit(ray, 0.0, std::f64::INFINITY, &mut record) {
         let c = 0.5

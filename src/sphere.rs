@@ -26,7 +26,8 @@ impl Hittable for Sphere {
             if t_min < t && t < t_max {
                 record.t = t;
                 record.p = ray.at(t);
-                record.normal = (record.p - self.center).unit_vector();
+                let outward_normal = (record.p - self.center).unit_vector();
+                record.set_face_normal(ray, outward_normal);
                 return true;
             }
 
@@ -34,7 +35,8 @@ impl Hittable for Sphere {
             if t_min < t && t < t_max {
                 record.t = t;
                 record.p = ray.at(t);
-                record.normal = (record.p - self.center).unit_vector();
+                let outward_normal = (record.p - self.center).unit_vector();
+                record.set_face_normal(ray, outward_normal);
                 return true;
             }
         }
@@ -52,7 +54,12 @@ mod tests {
         let sphere_ray_hit = Vec3::new(0.0, 0.0, 1.4);
         let sphere_ray_not_hit = Vec3::new(0.0, 0.0, 1.5);
         let radius = 1.0;
-        let mut record = HitRecord::new(Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 0.0), 0.0);
+        let mut record = HitRecord::new(
+            Vec3::new(0.0, 0.0, 0.0),
+            Vec3::new(0.0, 0.0, 0.0),
+            0.0,
+            false,
+        );
 
         // for xz plane
         let r_xz = Ray::new(org, Vec3::new(1.0, 0.0, 1.0));
