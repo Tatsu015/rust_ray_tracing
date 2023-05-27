@@ -7,7 +7,7 @@ use ray::Ray;
 use std::io::Write;
 use vec3::{Color, Point, Vec3};
 
-fn ray_color(ray: Ray) -> Color {
+fn ray_color(ray: &Ray) -> Color {
     if hit_sphere(Vec3::new(0.0, 0.0, -1.0), 0.5, ray) {
         return Color::new(1.0, 0.0, 0.0);
     }
@@ -20,7 +20,7 @@ fn ray_color(ray: Ray) -> Color {
     return (1.0 - t) * white + t * blue;
 }
 
-fn hit_sphere(center: Point, radius: f64, r: Ray) -> bool {
+fn hit_sphere(center: Point, radius: f64, r: &Ray) -> bool {
     let oc = r.org - center;
     let a = Vec3::dot(r.dir, r.dir);
     let b = Vec3::dot(r.dir, oc);
@@ -57,7 +57,7 @@ fn main() {
             let u = f64::from(j) / f64::from(WIDTH - 1);
             let v = f64::from(i) / f64::from(HEIGHT - 1);
             let ray = Ray::new(org, lower_left_corner + u * horizontal + v * vertical - org);
-            let c = ray_color(ray);
+            let c = ray_color(&ray);
             write_color(c);
         }
     }
@@ -77,20 +77,20 @@ mod tests {
 
         let r_xz = Ray::new(org, Vec3::new(1.0, 0.0, 1.0));
 
-        let sut = hit_sphere(sphere_ray_hit, radius, r_xz);
+        let sut = hit_sphere(sphere_ray_hit, radius, &r_xz);
         assert_eq!(sut, true);
-        let sut = hit_sphere(sphere_ray_hit_limit, radius, r_xz);
+        let sut = hit_sphere(sphere_ray_hit_limit, radius, &r_xz);
         assert_eq!(sut, true);
-        let sut = hit_sphere(sphere_ray_not_hit, radius, r_xz);
+        let sut = hit_sphere(sphere_ray_not_hit, radius, &r_xz);
         assert_eq!(sut, false);
 
         let r_yz = Ray::new(org, Vec3::new(0.0, 1.0, 1.0));
 
-        let sut = hit_sphere(sphere_ray_hit, radius, r_yz);
+        let sut = hit_sphere(sphere_ray_hit, radius, &r_yz);
         assert_eq!(sut, true);
-        let sut = hit_sphere(sphere_ray_hit_limit, radius, r_yz);
+        let sut = hit_sphere(sphere_ray_hit_limit, radius, &r_yz);
         assert_eq!(sut, true);
-        let sut = hit_sphere(sphere_ray_not_hit, radius, r_yz);
+        let sut = hit_sphere(sphere_ray_not_hit, radius, &r_yz);
         assert_eq!(sut, false);
     }
 }
