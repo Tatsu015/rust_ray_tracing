@@ -8,7 +8,7 @@ use std::io::Write;
 use vec3::{Color, Point, Vec3};
 
 fn ray_color(ray: Ray) -> Color {
-    if hit_sphere(Vec3::new(0.0, 0.0, 0.0), 0.5, ray) {
+    if hit_sphere(Vec3::new(0.0, 0.0, -1.0), 0.5, ray) {
         return Color::new(1.0, 0.0, 0.0);
     }
 
