@@ -148,7 +148,7 @@ mod tests {
     fn test_unit_vector() {
         let v1 = Vec3::new(2.0, 0.0, 0.0);
 
-        let ans = Vec3::unit_vector(v1);
+        let ans = v1.unit_vector();
 
         assert!(ans.x - 1.0 <= EPSILON);
         assert!(ans.y <= EPSILON);
