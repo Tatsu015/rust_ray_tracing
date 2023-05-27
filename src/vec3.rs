@@ -31,8 +31,8 @@ impl Vec3 {
         return Vec3::new(lhs.y - rhs.z, lhs.z - rhs.x, lhs.x - rhs.y);
     }
 
-    pub fn unit_vector(v: Vec3) -> Vec3 {
-        return v / v.length();
+    pub fn unit_vector(&self) -> Vec3 {
+        return Vec3::new(self.x, self.y, self.z) / self.length();
     }
 }
 

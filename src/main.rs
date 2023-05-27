@@ -15,7 +15,7 @@ fn ray_color(ray: &Ray) -> Color {
     let white: Color = Color::new(1.0, 1.0, 1.0);
     let blue: Color = Color::new(0.5, 0.7, 1.0);
 
-    let unit_dir = Vec3::unit_vector(ray.dir);
+    let unit_dir = ray.dir.unit_vector();
     let t = 0.5 * (unit_dir.y + 1.0);
     return (1.0 - t) * white + t * blue;
 }
