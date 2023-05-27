@@ -53,8 +53,7 @@ fn hit_sphere(
             record.normal = (record.p - center).unit_vector();
             return true;
         }
-    }
-    if d < 0.0 {
+
         let t = (-b + d.sqrt()) / a;
         if t_min < t && t < t_max {
             record.t = t;
