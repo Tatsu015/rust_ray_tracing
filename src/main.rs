@@ -8,8 +8,12 @@ use std::io::Write;
 use vec3::{Color, Point, Vec3};
 
 fn ray_color(ray: &Ray) -> Color {
-    if hit_sphere(Vec3::new(0.0, 0.0, -1.0), 0.5, ray) {
-        return Color::new(1.0, 0.0, 0.0);
+    let center = Vec3::new(0.0, 0.0, -1.0);
+    let t = hit_sphere(center, 0.5, ray);
+    if t > 0.0 {
+        let n = (ray.at(t) - center).unit_vector();
+        let c = 0.5 * Color::new(n.x + 1.0, n.y + 1.0, n.z + 1.0);
+        return c;
     }
 
     let white: Color = Color::new(1.0, 1.0, 1.0);
@@ -20,17 +24,17 @@ fn ray_color(ray: &Ray) -> Color {
     return (1.0 - t) * white + t * blue;
 }
 
-fn hit_sphere(center: Point, radius: f64, r: &Ray) -> bool {
+fn hit_sphere(center: Point, radius: f64, r: &Ray) -> f64 {
     let oc = r.org - center;
     let a = Vec3::dot(r.dir, r.dir);
     let b = Vec3::dot(r.dir, oc);
     let c = Vec3::dot(oc, oc) - radius * radius;
     let d = b * b - a * c;
 
-    if d > 0.0 {
-        return true;
+    if d < 0.0 {
+        return -1.0;
     }
-    return false;
+    return (-b - d.sqrt()) / a;
 }
 
 fn main() {
