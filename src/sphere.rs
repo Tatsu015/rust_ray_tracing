@@ -50,16 +50,11 @@ mod tests {
     use super::*;
     #[test]
     fn test_hit() {
-        let org = Vec3::new(0.0, 0.0, 0.0);
+        let org = Vec3::default();
         let sphere_ray_hit = Vec3::new(0.0, 0.0, 1.4);
         let sphere_ray_not_hit = Vec3::new(0.0, 0.0, 1.5);
         let radius = 1.0;
-        let mut record = HitRecord::new(
-            Vec3::new(0.0, 0.0, 0.0),
-            Vec3::new(0.0, 0.0, 0.0),
-            0.0,
-            false,
-        );
+        let mut record = HitRecord::default();
 
         // for xz plane
         let r_xz = Ray::new(org, Vec3::new(1.0, 0.0, 1.0));

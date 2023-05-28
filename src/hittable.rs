@@ -9,6 +9,14 @@ pub struct HitRecord {
 }
 
 impl HitRecord {
+    pub fn default() -> HitRecord {
+        return HitRecord {
+            p: Point::default(),
+            normal: Vec3::default(),
+            t: 0.0,
+            front_face: false,
+        };
+    }
     pub fn new(p: Point, normal: Vec3, t: f64, front_face: bool) -> HitRecord {
         return HitRecord {
             p,

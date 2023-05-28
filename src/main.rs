@@ -15,12 +15,7 @@ use std::io::Write;
 use vec3::{Color, Vec3};
 
 fn ray_color(ray: &Ray, world: &HittableList) -> Color {
-    let mut record = HitRecord::new(
-        Vec3::new(0.0, 0.0, 0.0),
-        Vec3::new(0.0, 0.0, 0.0),
-        0.0,
-        false,
-    );
+    let mut record = HitRecord::default();
 
     if world.hit(ray, 0.0, std::f64::INFINITY, &mut record) {
         let c = 0.5 * (Color::new(1.0, 1.0, 1.0) + record.normal);
@@ -43,7 +38,7 @@ fn main() {
     let viewport_width = viewport_height * ASPECT_RATIO;
     let focal_length = 1.0;
 
-    let org = Vec3::new(0.0, 0.0, 0.0);
+    let org = Vec3::default();
     let horizontal = Vec3::new(viewport_width, 0.0, 0.0);
     let vertical = Vec3::new(0.0, viewport_height, 0.0);
     let focal_center = Vec3::new(0.0, 0.0, focal_length);

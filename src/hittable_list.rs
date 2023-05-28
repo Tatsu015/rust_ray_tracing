@@ -24,12 +24,7 @@ impl Hittable for HittableList {
         let mut closest_so_far = t_max;
 
         for o in &self.objects {
-            let mut tmp_record: HitRecord = HitRecord::new(
-                Vec3::new(0.0, 0.0, 0.0),
-                Vec3::new(0.0, 0.0, 0.0),
-                0.0,
-                false,
-            );
+            let mut tmp_record: HitRecord = HitRecord::default();
             if o.hit(ray, t_min, closest_so_far, &mut tmp_record) {
                 hit_anything = true;
                 closest_so_far = tmp_record.t;
