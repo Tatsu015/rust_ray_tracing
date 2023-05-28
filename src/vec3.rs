@@ -11,14 +11,6 @@ pub type Color = Vec3;
 pub type Point = Vec3;
 
 impl Vec3 {
-    pub fn length_double(&self) -> f64 {
-        return self.x * self.x + self.y * self.y + self.z * self.z;
-    }
-
-    pub fn length(&self) -> f64 {
-        return self.length_double().sqrt();
-    }
-
     pub fn default() -> Vec3 {
         return Vec3 {
             x: 0.0,
@@ -43,11 +35,19 @@ impl Vec3 {
         return Vec3::new(self.x, self.y, self.z) / self.length();
     }
 
+    pub fn length_double(&self) -> f64 {
+        return self.x * self.x + self.y * self.y + self.z * self.z;
+    }
+
+    pub fn length(&self) -> f64 {
+        return self.length_double().sqrt();
+    }
+
     pub fn clamp(&self, min: f64, max: f64) -> Vec3 {
         return Vec3::new(
-            self.x.clamp(0.0, 1.0),
-            self.y.clamp(0.0, 1.0),
-            self.z.clamp(0.0, 1.0),
+            self.x.clamp(min, max),
+            self.y.clamp(min, max),
+            self.z.clamp(min, max),
         );
     }
 }
