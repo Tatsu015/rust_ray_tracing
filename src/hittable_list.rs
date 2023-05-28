@@ -8,6 +8,16 @@ pub struct HittableList {
     objects: Vec<Box<dyn Hittable>>,
 }
 
+impl HittableList {
+    pub fn default() -> HittableList {
+        return HittableList { objects: vec![] };
+    }
+
+    pub fn add(&mut self, object: Box<dyn Hittable>) {
+        self.objects.push(object);
+    }
+}
+
 impl Hittable for HittableList {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, record: &mut HitRecord) -> bool {
         let mut hit_anything = false;
