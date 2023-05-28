@@ -1,9 +1,9 @@
 use crate::vec3::Color;
 
-pub fn write_color(pixcel_color: Color) {
-    let ir = (256.0 * pixcel_color.x).floor();
-    let ig = (256.0 * pixcel_color.y).floor();
-    let ib = (256.0 * pixcel_color.z).floor();
+pub fn write_color(pixcel_color: Color, sample_per_pixcel: u32) {
+    let e = pixcel_color / (sample_per_pixcel as f64);
+    let e = e.clamp(0.0, 1.0);
+    let e = 256.0 * e;
 
-    println!("{} {} {}", ir, ig, ib);
+    println!("{} {} {}", e.x, e.y, e.z);
 }

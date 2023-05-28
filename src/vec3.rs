@@ -42,6 +42,14 @@ impl Vec3 {
     pub fn unit_vector(&self) -> Vec3 {
         return Vec3::new(self.x, self.y, self.z) / self.length();
     }
+
+    pub fn clamp(&self, min: f64, max: f64) -> Vec3 {
+        return Vec3::new(
+            self.x.clamp(0.0, 1.0),
+            self.y.clamp(0.0, 1.0),
+            self.z.clamp(0.0, 1.0),
+        );
+    }
 }
 
 impl ops::Add<Vec3> for Vec3 {

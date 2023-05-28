@@ -7,6 +7,10 @@ mod ray;
 mod sphere;
 mod vec3;
 
+extern crate rand;
+
+use rand::Rng;
+
 use camera::Camera;
 use color::write_color;
 use hittable::{HitRecord, Hittable};
@@ -32,9 +36,12 @@ fn ray_color(ray: &Ray, world: &HittableList) -> Color {
 }
 
 fn main() {
+    let mut rng = rand::thread_rng();
+
     const ASPECT_RATIO: f64 = 16.0 / 9.0;
-    const WIDTH: i32 = 384;
-    const HEIGHT: i32 = ((WIDTH as f64) / ASPECT_RATIO) as i32;
+    const WIDTH: u32 = 384;
+    const HEIGHT: u32 = ((WIDTH as f64) / ASPECT_RATIO) as u32;
+    const SAMPLE_PER_PIXCEL: u32 = 100;
 
     let mut world = HittableList::default();
     world.add(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5)));
@@ -48,11 +55,14 @@ fn main() {
         eprint!("\rremain {}", i);
         std::io::stdout().flush().unwrap();
         for j in 0..WIDTH {
-            let u = f64::from(j) / f64::from(WIDTH - 1);
-            let v = f64::from(i) / f64::from(HEIGHT - 1);
-            let ray = camera.get_ray(u, v);
-            let c = ray_color(&ray, &world);
-            write_color(c);
+            let mut pixcel_sum_color = Color::default();
+            for _ in 0..SAMPLE_PER_PIXCEL {
+                let u = (f64::from(j) + rng.gen::<f64>()) / f64::from(WIDTH - 1);
+                let v = (f64::from(i) + rng.gen::<f64>()) / f64::from(HEIGHT - 1);
+                let ray = camera.get_ray(u, v);
+                pixcel_sum_color += ray_color(&ray, &world);
+            }
+            write_color(pixcel_sum_color, SAMPLE_PER_PIXCEL);
         }
     }
     eprintln!("DONE");
