@@ -17,14 +17,7 @@ impl HitRecord {
             front_face: false,
         };
     }
-    pub fn new(p: Point, normal: Vec3, t: f64, front_face: bool) -> HitRecord {
-        return HitRecord {
-            p,
-            normal,
-            t,
-            front_face,
-        };
-    }
+
     pub fn set_face_normal(&mut self, ray: &Ray, outward_normal: Vec3) {
         self.front_face = Vec3::dot(ray.dir, outward_normal) < 0.0;
         self.normal = if self.front_face {

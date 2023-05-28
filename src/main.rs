@@ -1,3 +1,4 @@
+mod camera;
 mod color;
 mod hittable;
 mod hittable_list;
@@ -6,6 +7,7 @@ mod ray;
 mod sphere;
 mod vec3;
 
+use camera::Camera;
 use color::write_color;
 use hittable::{HitRecord, Hittable};
 use hittable_list::HittableList;
@@ -34,19 +36,11 @@ fn main() {
     const WIDTH: i32 = 384;
     const HEIGHT: i32 = ((WIDTH as f64) / ASPECT_RATIO) as i32;
 
-    let viewport_height = 2.0;
-    let viewport_width = viewport_height * ASPECT_RATIO;
-    let focal_length = 1.0;
-
-    let org = Vec3::default();
-    let horizontal = Vec3::new(viewport_width, 0.0, 0.0);
-    let vertical = Vec3::new(0.0, viewport_height, 0.0);
-    let focal_center = Vec3::new(0.0, 0.0, focal_length);
-    let lower_left_corner = org - horizontal / 2.0 - vertical / 2.0 - focal_center;
-
     let mut world = HittableList::default();
     world.add(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5)));
     world.add(Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0)));
+
+    let camera = Camera::new(ASPECT_RATIO);
 
     println!("P3\n{} {}\n255", WIDTH, HEIGHT);
 
@@ -56,7 +50,7 @@ fn main() {
         for j in 0..WIDTH {
             let u = f64::from(j) / f64::from(WIDTH - 1);
             let v = f64::from(i) / f64::from(HEIGHT - 1);
-            let ray = Ray::new(org, lower_left_corner + u * horizontal + v * vertical - org);
+            let ray = camera.get_ray(u, v);
             let c = ray_color(&ray, &world);
             write_color(c);
         }

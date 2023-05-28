@@ -1,7 +1,6 @@
 use crate::{
     hittable::{HitRecord, Hittable},
     ray::Ray,
-    vec3::Vec3,
 };
 
 pub struct HittableList {
