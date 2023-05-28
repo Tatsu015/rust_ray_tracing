@@ -71,6 +71,10 @@ impl Vec3 {
             self.z.clamp(min, max),
         );
     }
+
+    pub fn sqrt(&self) -> Vec3 {
+        return Vec3::new(self.x.sqrt(), self.y.sqrt(), self.z.sqrt());
+    }
 }
 
 impl ops::Add<Vec3> for Vec3 {
