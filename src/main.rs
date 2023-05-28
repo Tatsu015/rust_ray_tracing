@@ -28,7 +28,7 @@ fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
     }
     let mut record = HitRecord::default();
     if world.hit(ray, 0.0001, std::f64::INFINITY, &mut record) {
-        let ref_ray = Ray::new(record.p, record.normal + Vec3::random_in_unit_sphere());
+        let ref_ray = Ray::new(record.p, record.normal + Vec3::random_unit_vector());
         let c = ATTENUATION_RATE * ray_color(&ref_ray, &world, depth - 1);
         return c;
     }
