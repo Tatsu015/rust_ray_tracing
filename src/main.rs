@@ -20,11 +20,16 @@ use sphere::Sphere;
 use std::io::Write;
 use vec3::{Color, Vec3};
 
-fn ray_color(ray: &Ray, world: &HittableList) -> Color {
-    let mut record = HitRecord::default();
+const ATTENUATION_RATE: f64 = 0.5;
 
+fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
+    if depth <= 0 {
+        return Color::default();
+    }
+    let mut record = HitRecord::default();
     if world.hit(ray, 0.0, std::f64::INFINITY, &mut record) {
-        let c = 0.5 * (Color::new(1.0, 1.0, 1.0) + record.normal);
+        let ref_ray = Ray::new(record.p, record.normal + Vec3::random_in_unit_sphere());
+        let c = ATTENUATION_RATE * ray_color(&ref_ray, &world, depth - 1);
         return c;
     }
 
@@ -42,6 +47,7 @@ fn main() {
     const WIDTH: u32 = 384;
     const HEIGHT: u32 = ((WIDTH as f64) / ASPECT_RATIO) as u32;
     const SAMPLE_PER_PIXCEL: u32 = 100;
+    const MAX_DEPTH: u32 = 50;
 
     let mut world = HittableList::default();
     world.add(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5)));
@@ -60,7 +66,7 @@ fn main() {
                 let u = (f64::from(j) + rng.gen::<f64>()) / f64::from(WIDTH - 1);
                 let v = (f64::from(i) + rng.gen::<f64>()) / f64::from(HEIGHT - 1);
                 let ray = camera.get_ray(u, v);
-                pixcel_sum_color += ray_color(&ray, &world);
+                pixcel_sum_color += ray_color(&ray, &world, MAX_DEPTH);
             }
             write_color(pixcel_sum_color, SAMPLE_PER_PIXCEL);
         }
