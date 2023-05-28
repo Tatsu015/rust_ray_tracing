@@ -52,7 +52,7 @@ fn main() {
     println!("P3\n{} {}\n255", WIDTH, HEIGHT);
 
     for i in (0..HEIGHT).rev() {
-        eprint!("\rremain {}", i);
+        eprint!("\rremain {:3}", i);
         std::io::stdout().flush().unwrap();
         for j in 0..WIDTH {
             let mut pixcel_sum_color = Color::default();
