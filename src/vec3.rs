@@ -52,6 +52,15 @@ impl Vec3 {
         return Vec3::new(r * f64::cos(a), r * f64::sin(a), z);
     }
 
+    pub fn random_in_hemisphere(normal: Vec3) -> Vec3 {
+        let unit_sphere = Vec3::random_in_unit_sphere();
+        if Vec3::dot(unit_sphere, normal) > 0.0 {
+            return unit_sphere;
+        } else {
+            return -1.0 * unit_sphere;
+        }
+    }
+
     pub fn dot(lhs: Vec3, rhs: Vec3) -> f64 {
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
     }
