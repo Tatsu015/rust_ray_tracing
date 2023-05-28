@@ -46,6 +46,7 @@ fn main() {
 
     let mut world = HittableList::default();
     world.add(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5)));
+    world.add(Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0)));
 
     println!("P3\n{} {}\n255", WIDTH, HEIGHT);
 
