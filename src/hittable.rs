@@ -1,3 +1,4 @@
+use crate::material::Material;
 use crate::ray::Ray;
 use crate::vec3::{Point, Vec3};
 
@@ -6,16 +7,28 @@ pub struct HitRecord {
     pub normal: Vec3,
     pub t: f64,
     pub front_face: bool,
+    pub material: Option<Box<dyn Material>>,
 }
 
 impl HitRecord {
-    pub fn default() -> HitRecord {
+    pub fn new(
+        p: Point,
+        normal: Vec3,
+        t: f64,
+        front_face: bool,
+        material: Option<Box<dyn Material>>,
+    ) -> HitRecord {
         return HitRecord {
-            p: Point::default(),
-            normal: Vec3::default(),
-            t: 0.0,
-            front_face: false,
+            p,
+            normal,
+            t,
+            front_face,
+            material,
         };
+    }
+
+    pub fn is_front_face(ray: &Ray, outward_normal: Vec3) -> bool {
+        return Vec3::dot(ray.dir, outward_normal) < 0.0;
     }
 
     pub fn set_face_normal(&mut self, ray: &Ray, outward_normal: Vec3) {
@@ -29,5 +42,5 @@ impl HitRecord {
 }
 
 pub trait Hittable {
-    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, record: &mut HitRecord) -> bool;
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord>;
 }

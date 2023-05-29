@@ -2,6 +2,7 @@ mod camera;
 mod color;
 mod hittable;
 mod hittable_list;
+mod lambertian;
 mod material;
 mod math;
 mod ray;
@@ -14,8 +15,9 @@ use rand::Rng;
 
 use camera::Camera;
 use color::write_color;
-use hittable::{HitRecord, Hittable};
+use hittable::Hittable;
 use hittable_list::HittableList;
+use lambertian::Lambertian;
 use ray::Ray;
 use sphere::Sphere;
 use std::io::Write;
@@ -27,8 +29,8 @@ fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
     if depth <= 0 {
         return Color::default();
     }
-    let mut record = HitRecord::default();
-    if world.hit(ray, 0.0001, std::f64::INFINITY, &mut record) {
+    let result = world.hit(ray, 0.0001, std::f64::INFINITY);
+    if let Some(record) = result {
         let ref_ray = Ray::new(record.p, Vec3::random_in_hemisphere(record.normal));
         let c = ATTENUATION_RATE * ray_color(&ref_ray, &world, depth - 1);
         return c;
@@ -51,8 +53,16 @@ fn main() {
     const MAX_DEPTH: u32 = 50;
 
     let mut world = HittableList::default();
-    world.add(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5)));
-    world.add(Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0)));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(0.0, 0.0, -1.0),
+        0.5,
+        Box::new(Lambertian::new(Color::new(0.7, 0.3, 0.3))),
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(0.0, -100.5, -1.0),
+        100.0,
+        Box::new(Lambertian::new(Color::new(0.8, 0.8, 0.0))),
+    )));
 
     let camera = Camera::new(ASPECT_RATIO);
 

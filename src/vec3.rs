@@ -1,7 +1,7 @@
 use std::ops;
 
 extern crate rand;
-use rand::{random, Rng};
+use rand::Rng;
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub struct Vec3 {
