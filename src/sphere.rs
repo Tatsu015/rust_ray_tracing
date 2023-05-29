@@ -33,8 +33,7 @@ impl Hittable for Sphere {
                 let p = ray.at(t);
                 let outward_normal = (p - self.center).unit_vector();
                 let front_face = HitRecord::is_front_face(ray, outward_normal);
-                let record =
-                    HitRecord::new(p, outward_normal, t, front_face, Some(&*self.material));
+                let record = HitRecord::new(p, outward_normal, t, front_face, &*self.material);
                 return Some(record);
             }
 
@@ -43,7 +42,7 @@ impl Hittable for Sphere {
                 let p = ray.at(t);
                 let outward_normal = (p - self.center).unit_vector();
                 let front_face = HitRecord::is_front_face(ray, outward_normal);
-                let record = HitRecord::new(p, outward_normal, t, front_face, Some(self.material));
+                let record = HitRecord::new(p, outward_normal, t, front_face, &*self.material);
                 return Some(record);
             }
         }
