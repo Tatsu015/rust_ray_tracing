@@ -5,6 +5,7 @@ mod hittable_list;
 mod lambertian;
 mod material;
 mod math;
+mod metal;
 mod ray;
 mod sphere;
 mod vec3;
@@ -18,12 +19,11 @@ use color::write_color;
 use hittable::Hittable;
 use hittable_list::HittableList;
 use lambertian::Lambertian;
+use metal::Metal;
 use ray::Ray;
 use sphere::Sphere;
 use std::io::Write;
 use vec3::{Color, Vec3};
-
-const ATTENUATION_RATE: f64 = 0.5;
 
 fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
     if depth <= 0 {
@@ -31,8 +31,15 @@ fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
     }
     let result = world.hit(ray, 0.0001, std::f64::INFINITY);
     if let Some(record) = result {
+        let mut attenuation = Color::default();
+        let mut scattered = Ray::new(Vec3::default(), Vec3::default());
+        record
+            .material
+            .scatter(&ray, &record, &mut attenuation, &mut scattered);
+
         let ref_ray = Ray::new(record.p, Vec3::random_in_hemisphere(record.normal));
-        let c = ATTENUATION_RATE * ray_color(&ref_ray, &world, depth - 1);
+
+        let c = attenuation * ray_color(&ref_ray, &world, depth - 1);
         return c;
     }
 
@@ -62,6 +69,17 @@ fn main() {
         Vec3::new(0.0, -100.5, -1.0),
         100.0,
         Box::new(Lambertian::new(Color::new(0.8, 0.8, 0.0))),
+    )));
+
+    world.add(Box::new(Sphere::new(
+        Vec3::new(1.0, 0.0, -1.0),
+        0.5,
+        Box::new(Metal::new(Color::new(0.8, 0.6, 0.2))),
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(-1.0, 0.0, -1.0),
+        0.5,
+        Box::new(Metal::new(Color::new(0.8, 0.8, 0.8))),
     )));
 
     let camera = Camera::new(ASPECT_RATIO);
