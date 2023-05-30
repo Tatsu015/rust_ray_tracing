@@ -92,6 +92,11 @@ impl Vec3 {
     pub fn sqrt(&self) -> Vec3 {
         return Vec3::new(self.x.sqrt(), self.y.sqrt(), self.z.sqrt());
     }
+
+    pub fn reflect(&self, normal: Vec3) -> Vec3 {
+        let length = 2.0 * Vec3::dot(*self, normal);
+        return *self - length * normal;
+    }
 }
 
 impl ops::Add<Vec3> for Vec3 {
@@ -308,5 +313,16 @@ mod tests {
         assert!((ans.x - 0.55) <= EPSILON);
         assert!((ans.y - 1.1) <= EPSILON);
         assert!((ans.z - 1.65) <= EPSILON);
+    }
+
+    #[test]
+    fn test_div_reflect() {
+        let v1 = Vec3::new(2.0, 3.0, 4.0);
+        let n = Vec3::new(1.0, 1.0, 1.0);
+        let ans = v1.reflect(n);
+
+        assert!((ans.x + 2.0) <= EPSILON);
+        assert!((ans.y + 3.0) <= EPSILON);
+        assert!((ans.z + 4.0) <= EPSILON);
     }
 }
