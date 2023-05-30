@@ -33,14 +33,14 @@ fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
     if let Some(record) = result {
         let mut attenuation = Color::default();
         let mut scattered = Ray::new(Vec3::default(), Vec3::default());
-        record
+        if record
             .material
-            .scatter(&ray, &record, &mut attenuation, &mut scattered);
+            .scatter(&ray, &record, &mut attenuation, &mut scattered)
+        {
+            return attenuation * ray_color(&scattered, &world, depth - 1);
+        }
 
-        let ref_ray = Ray::new(record.p, Vec3::random_in_hemisphere(record.normal));
-
-        let c = attenuation * ray_color(&ref_ray, &world, depth - 1);
-        return c;
+        return Color::default();
     }
 
     let white: Color = Color::new(1.0, 1.0, 1.0);
