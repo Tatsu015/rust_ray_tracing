@@ -31,13 +31,9 @@ fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
     }
     let result = world.hit(ray, 0.0001, std::f64::INFINITY);
     if let Some(record) = result {
-        let mut attenuation = Color::default();
-        let mut scattered = Ray::new(Vec3::default(), Vec3::default());
-        if record
-            .material
-            .scatter(&ray, &record, &mut attenuation, &mut scattered)
-        {
-            return attenuation * ray_color(&scattered, &world, depth - 1);
+        let result = record.material.scatter(&ray, &record);
+        if let Some(v) = result {
+            return v.attenuation * ray_color(&v.ray, &world, depth - 1);
         }
 
         return Color::default();

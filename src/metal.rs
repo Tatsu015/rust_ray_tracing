@@ -1,6 +1,6 @@
 use crate::{
     hittable::HitRecord,
-    material::Material,
+    material::{Material, Scattered},
     ray::Ray,
     vec3::{Color, Vec3},
 };
@@ -16,16 +16,17 @@ impl Metal {
 }
 
 impl Material for Metal {
-    fn scatter(
-        &self,
-        ray_in: &Ray,
-        record: &HitRecord,
-        attenuation: &mut Color,
-        scattered: &mut Ray,
-    ) -> bool {
+    fn scatter(&self, ray_in: &Ray, record: &HitRecord) -> Option<Scattered> {
         let reflected = ray_in.dir.reflect(record.normal).unit_vector();
-        *scattered = Ray::new(record.p, reflected);
-        *attenuation = self.albedo;
-        return Vec3::dot(scattered.dir, record.normal) > 0.0;
+        let ray = Ray::new(record.p, reflected);
+        let attenuation = self.albedo;
+
+        let is_reflected = Vec3::dot(ray.dir, record.normal) > 0.0;
+        if is_reflected {
+            let scattered = Scattered::new(ray, attenuation);
+            return Some(scattered);
+        } else {
+            return None;
+        }
     }
 }
