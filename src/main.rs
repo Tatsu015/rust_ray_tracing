@@ -70,12 +70,12 @@ fn main() {
     world.add(Box::new(Sphere::new(
         Vec3::new(1.0, 0.0, -1.0),
         0.5,
-        Box::new(Metal::new(Color::new(0.8, 0.6, 0.2))),
+        Box::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.0)),
     )));
     world.add(Box::new(Sphere::new(
         Vec3::new(-1.0, 0.0, -1.0),
         0.5,
-        Box::new(Metal::new(Color::new(0.8, 0.8, 0.8))),
+        Box::new(Metal::new(Color::new(0.8, 0.8, 0.8), 0.5)),
     )));
 
     let camera = Camera::new(ASPECT_RATIO);
