@@ -17,7 +17,7 @@ impl Dielectric {
     fn refract(&self, unit_ray_in_dir: Vec3, normal: Vec3, eta_in_over_out: f64) -> Vec3 {
         let cos_theta: f64 = Vec3::dot(-1.0 * unit_ray_in_dir, normal);
         let out_parallel: Vec3 = eta_in_over_out * (unit_ray_in_dir + cos_theta * normal);
-        let out_perpendicular = -(1.0 - out_parallel.length_double()) * normal;
+        let out_perpendicular = -(1.0 - out_parallel.length_double()).sqrt() * normal;
 
         return out_parallel + out_perpendicular;
     }
@@ -33,9 +33,27 @@ impl Material for Dielectric {
         };
 
         let unit_ray_in_dir = ray_in.dir.unit_vector();
-        let reflact = self.refract(unit_ray_in_dir, record.normal, eta_in_over_out);
-        let scattered = Scattered::new(Ray::new(record.p, reflact), attenuation);
+        let refract = self.refract(unit_ray_in_dir, record.normal, eta_in_over_out);
+        let scattered = Scattered::new(Ray::new(record.p, refract), attenuation);
 
         return Some(scattered);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const EPSILON: f64 = 0.000001;
+
+    #[test]
+    fn test_refract() {
+        let d = Dielectric::new(1.0);
+        let unit_ray_in_dir = Vec3::new(1.0, 0.0, 0.0);
+        let normal = Vec3::new(1.0, 0.0, 0.0);
+        let sut = d.refract(unit_ray_in_dir, normal, 1.0);
+        assert!(sut.x - 1.0 <= EPSILON);
+        assert!(sut.y - 0.0 <= EPSILON);
+        assert!(sut.z - 0.0 <= EPSILON);
     }
 }
