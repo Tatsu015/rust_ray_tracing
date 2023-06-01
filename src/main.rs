@@ -1,5 +1,6 @@
 mod camera;
 mod color;
+mod dielectric;
 mod hittable;
 mod hittable_list;
 mod lambertian;
@@ -16,6 +17,7 @@ use rand::Rng;
 
 use camera::Camera;
 use color::write_color;
+use dielectric::Dielectric;
 use hittable::Hittable;
 use hittable_list::HittableList;
 use lambertian::Lambertian;
@@ -59,7 +61,7 @@ fn main() {
     world.add(Box::new(Sphere::new(
         Vec3::new(0.0, 0.0, -1.0),
         0.5,
-        Box::new(Lambertian::new(Color::new(0.7, 0.3, 0.3))),
+        Box::new(Dielectric::new(1.0)),
     )));
     world.add(Box::new(Sphere::new(
         Vec3::new(0.0, -100.5, -1.0),
