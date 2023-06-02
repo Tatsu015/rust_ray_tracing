@@ -52,7 +52,7 @@ fn main() {
     let mut rng = rand::thread_rng();
 
     const ASPECT_RATIO: f64 = 16.0 / 9.0;
-    const WIDTH: u32 = 384;
+    const WIDTH: u32 = 100;
     const HEIGHT: u32 = ((WIDTH as f64) / ASPECT_RATIO) as u32;
     const SAMPLE_PER_PIXCEL: u32 = 100;
     const MAX_DEPTH: u32 = 50;
@@ -80,7 +80,7 @@ fn main() {
         Box::new(Dielectric::new(1.5)),
     )));
 
-    let camera = Camera::new(ASPECT_RATIO);
+    let camera = Camera::new(120.0, ASPECT_RATIO);
 
     println!("P3\n{} {}\n255", WIDTH, HEIGHT);
 
