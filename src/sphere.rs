@@ -28,21 +28,24 @@ impl Hittable for Sphere {
         let d = b * b - a * c;
 
         if d > 0.0 {
-            let t = (-b - d.sqrt()) / a;
-            if t_min < t && t < t_max {
-                let p = ray.at(t);
-                let outward_normal = -1.0 * (p - self.center).unit_vector();
-                let front_face = HitRecord::is_front_face(ray, outward_normal);
-                let record = HitRecord::new(p, outward_normal, t, front_face, &*self.material);
-                return Some(record);
-            }
-
-            let t = (-b + d.sqrt()) / a;
+            let root = d.sqrt();
+            let t = (-b - root) / a;
             if t_min < t && t < t_max {
                 let p = ray.at(t);
                 let outward_normal = (p - self.center).unit_vector();
                 let front_face = HitRecord::is_front_face(ray, outward_normal);
-                let record = HitRecord::new(p, outward_normal, t, front_face, &*self.material);
+                let normal = HitRecord::get_normal(front_face, outward_normal);
+                let record = HitRecord::new(p, normal, t, front_face, &*self.material);
+                return Some(record);
+            }
+
+            let t = (-b + root) / a;
+            if t_min < t && t < t_max {
+                let p = ray.at(t);
+                let outward_normal = (p - self.center).unit_vector();
+                let front_face = HitRecord::is_front_face(ray, outward_normal);
+                let normal = HitRecord::get_normal(front_face, outward_normal);
+                let record = HitRecord::new(p, normal, t, front_face, &*self.material);
                 return Some(record);
             }
         }

@@ -30,6 +30,14 @@ impl<'a> HitRecord<'a> {
     pub fn is_front_face(ray: &Ray, outward_normal: Vec3) -> bool {
         return Vec3::dot(ray.dir, outward_normal) < 0.0;
     }
+
+    pub fn get_normal(front_face: bool, outward_normal: Vec3) -> Vec3 {
+        if front_face {
+            outward_normal
+        } else {
+            -1.0 * outward_normal
+        }
+    }
 }
 
 pub trait Hittable {
