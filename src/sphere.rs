@@ -31,7 +31,7 @@ impl Hittable for Sphere {
             let t = (-b - d.sqrt()) / a;
             if t_min < t && t < t_max {
                 let p = ray.at(t);
-                let outward_normal = (p - self.center).unit_vector();
+                let outward_normal = -1.0 * (p - self.center).unit_vector();
                 let front_face = HitRecord::is_front_face(ray, outward_normal);
                 let record = HitRecord::new(p, outward_normal, t, front_face, &*self.material);
                 return Some(record);
