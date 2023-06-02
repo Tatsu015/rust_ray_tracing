@@ -52,7 +52,7 @@ fn main() {
     let mut rng = rand::thread_rng();
 
     const ASPECT_RATIO: f64 = 16.0 / 9.0;
-    const WIDTH: u32 = 100;
+    const WIDTH: u32 = 384;
     const HEIGHT: u32 = ((WIDTH as f64) / ASPECT_RATIO) as u32;
     const SAMPLE_PER_PIXCEL: u32 = 100;
     const MAX_DEPTH: u32 = 50;
