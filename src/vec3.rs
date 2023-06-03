@@ -66,7 +66,11 @@ impl Vec3 {
     }
 
     pub fn cross(lhs: Vec3, rhs: Vec3) -> Vec3 {
-        return Vec3::new(lhs.y - rhs.z, lhs.z - rhs.x, lhs.x - rhs.y);
+        return Vec3::new(
+            lhs.y * rhs.z - rhs.y * lhs.z,
+            lhs.z * rhs.x - rhs.z * lhs.x,
+            lhs.x * rhs.y - rhs.x * lhs.y,
+        );
     }
 
     pub fn unit_vector(&self) -> Vec3 {
