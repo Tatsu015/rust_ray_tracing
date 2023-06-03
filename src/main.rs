@@ -27,6 +27,8 @@ use sphere::Sphere;
 use std::io::Write;
 use vec3::{Color, Vec3};
 
+use crate::vec3::Point;
+
 fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
     if depth <= 0 {
         return Color::default();
@@ -58,29 +60,41 @@ fn main() {
     const MAX_DEPTH: u32 = 50;
 
     let mut world = HittableList::default();
+    let R = std::f64::consts::FRAC_PI_4.cos();
     world.add(Box::new(Sphere::new(
-        Vec3::new(0.0, 0.0, -1.0),
-        0.5,
-        Box::new(Lambertian::new(Color::new(0.1, 0.2, 0.5))),
+        Vec3::new(-R, 0.0, -1.0),
+        R,
+        Box::new(Lambertian::new(Color::new(0.0, 0.0, 1.0))),
     )));
     world.add(Box::new(Sphere::new(
-        Vec3::new(0.0, -100.5, -1.0),
-        100.0,
-        Box::new(Lambertian::new(Color::new(0.8, 0.8, 0.0))),
+        Vec3::new(R, 0.0, -1.0),
+        R,
+        Box::new(Lambertian::new(Color::new(1.0, 0.0, 0.0))),
     )));
+    // world.add(Box::new(Sphere::new(
+    //     Vec3::new(0.0, -100.5, -1.0),
+    //     100.0,
+    //     Box::new(Lambertian::new(Color::new(0.8, 0.8, 0.0))),
+    // )));
 
-    world.add(Box::new(Sphere::new(
-        Vec3::new(1.0, 0.0, -1.0),
-        0.5,
-        Box::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.0)),
-    )));
-    world.add(Box::new(Sphere::new(
-        Vec3::new(-1.0, 0.0, -1.0),
-        0.5,
-        Box::new(Dielectric::new(1.5)),
-    )));
+    // world.add(Box::new(Sphere::new(
+    //     Vec3::new(1.0, 0.0, -1.0),
+    //     0.5,
+    //     Box::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.0)),
+    // )));
+    // world.add(Box::new(Sphere::new(
+    //     Vec3::new(-1.0, 0.0, -1.0),
+    //     0.5,
+    //     Box::new(Dielectric::new(1.5)),
+    // )));
 
-    let camera = Camera::new(120.0, ASPECT_RATIO);
+    let camera = Camera::new(
+        Point::new(0.0, 0.0, 0.0),
+        Point::new(0.0, 0.0, -1.0),
+        Vec3::new(0.0, 1.0, 0.0),
+        90.0,
+        ASPECT_RATIO,
+    );
 
     println!("P3\n{} {}\n255", WIDTH, HEIGHT);
 
