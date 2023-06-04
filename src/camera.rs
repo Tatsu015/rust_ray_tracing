@@ -34,8 +34,8 @@ impl Camera {
         let v = Vec3::cross(w, u);
 
         let origin = lookfrom;
-        let horizontal = viewport_width * u;
-        let vertical = viewport_height * v;
+        let horizontal = focus_dist * viewport_width * u;
+        let vertical = focus_dist * viewport_height * v;
         let lower_left_corner = origin - horizontal / 2.0 - vertical / 2.0 - focus_dist * w;
         let lens_radius = aperture * 0.5;
 
