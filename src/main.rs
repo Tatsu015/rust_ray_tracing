@@ -28,32 +28,71 @@ use sphere::Sphere;
 use std::io::Write;
 use vec3::{Color, Vec3};
 
+const RANGE: i32 = 11;
+
 fn random_scene() -> HittableList {
     let mut world = HittableList::default();
+
+    // ground
     world.add(Box::new(Sphere::new(
-        Vec3::new(0.0, 0.0, -1.0),
-        0.5,
-        Box::new(Lambertian::new(Color::new(0.1, 0.2, 0.5))),
+        Vec3::new(0.0, -1000.0, 0.0),
+        1000.0,
+        Box::new(Lambertian::new(Color::new(0.5, 0.5, 0.5))),
     )));
+
+    for a in -RANGE..RANGE {
+        for b in -RANGE..RANGE {
+            let mut rng = rand::thread_rng();
+            let choose_mat = rng.gen_range(0.0..1.0);
+            let center = Point::new(
+                (a as f64) + 0.9 * rng.gen_range(0.0..1.0),
+                0.2,
+                (b as f64) * 0.9 * rng.gen_range(0.0..1.0),
+            );
+
+            if (center - Vec3::new(4.0, 0.2, 0.0)).length() > 0.9 {
+                if choose_mat < 0.8 {
+                    // diffuse
+                    let albedo = Color::random(0.0, 1.0) * Color::random(0.0, 1.0);
+                    world.add(Box::new(Sphere::new(
+                        center,
+                        0.2,
+                        Box::new(Lambertian::new(albedo)),
+                    )));
+                } else if choose_mat < 0.95 {
+                    // metal
+                    let albedo = Color::random(0.5, 1.0);
+                    let fizz = rng.gen_range(0.0..0.5);
+                    world.add(Box::new(Sphere::new(
+                        center,
+                        0.2,
+                        Box::new(Metal::new(albedo, fizz)),
+                    )));
+                } else {
+                    // glass
+                    world.add(Box::new(Sphere::new(
+                        center,
+                        0.2,
+                        Box::new(Dielectric::new(1.5)),
+                    )));
+                }
+            }
+        }
+    }
     world.add(Box::new(Sphere::new(
-        Vec3::new(0.0, -100.5, -1.0),
-        100.0,
-        Box::new(Lambertian::new(Color::new(0.8, 0.8, 0.0))),
-    )));
-    world.add(Box::new(Sphere::new(
-        Vec3::new(1.0, 0.0, -1.0),
-        0.5,
-        Box::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.3)),
-    )));
-    world.add(Box::new(Sphere::new(
-        Vec3::new(-1.0, 0.0, -1.0),
-        0.5,
+        Vec3::new(0.0, 1.0, 0.0),
+        1.0,
         Box::new(Dielectric::new(1.5)),
     )));
     world.add(Box::new(Sphere::new(
-        Vec3::new(-1.0, 0.0, -1.0),
-        -0.45,
-        Box::new(Dielectric::new(1.5)),
+        Vec3::new(-4.0, 1.0, 0.0),
+        1.0,
+        Box::new(Lambertian::new(Color::new(0.4, 0.2, 0.1))),
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(4.0, 1.0, 0.0),
+        1.0,
+        Box::new(Metal::new(Color::new(0.7, 0.6, 0.5), 0.0)),
     )));
 
     return world;
@@ -84,23 +123,24 @@ fn main() {
     let mut rng = rand::thread_rng();
 
     const ASPECT_RATIO: f64 = 16.0 / 9.0;
-    const WIDTH: u32 = 200;
+    const WIDTH: u32 = 100;
     const HEIGHT: u32 = ((WIDTH as f64) / ASPECT_RATIO) as u32;
     const SAMPLE_PER_PIXCEL: u32 = 100;
     const MAX_DEPTH: u32 = 50;
 
-    let lookfrom = Point::new(3.0, 3.0, 2.0);
-    let lookat = Point::new(0.0, 0.0, -1.0);
+    let lookfrom = Point::new(13.0, 2.0, 3.0);
+    let lookat = Point::new(0.0, 0.0, 0.0);
     let vup = Vec3::new(0.0, 1.0, 0.0);
-
+    let dist_to_focus = 10.0;
+    let aperture = 0.1;
     let camera = Camera::new(
         lookfrom,
         lookat,
         vup,
-        90.0,
+        20.0,
         ASPECT_RATIO,
-        2.0,
-        (lookfrom - lookat).length(),
+        aperture,
+        dist_to_focus,
     );
 
     let world = random_scene();
