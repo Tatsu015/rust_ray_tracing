@@ -86,12 +86,18 @@ fn main() {
         Box::new(Dielectric::new(1.5)),
     )));
 
+    let lookfrom = Point::new(3.0, 3.0, 2.0);
+    let lookat = Point::new(0.0, 0.0, -1.0);
+    let vup = Vec3::new(0.0, 1.0, 0.0);
+
     let camera = Camera::new(
-        Point::new(0.0, 0.0, 0.0),
-        Point::new(0.0, 0.0, -1.0),
-        Vec3::new(0.0, 1.0, 0.0),
+        lookfrom,
+        lookat,
+        vup,
         90.0,
         ASPECT_RATIO,
+        2.0,
+        (lookfrom - lookat).length(),
     );
 
     println!("P3\n{} {}\n255", WIDTH, HEIGHT);
