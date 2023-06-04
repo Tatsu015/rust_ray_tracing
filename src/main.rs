@@ -54,39 +54,37 @@ fn main() {
     let mut rng = rand::thread_rng();
 
     const ASPECT_RATIO: f64 = 16.0 / 9.0;
-    const WIDTH: u32 = 100;
+    const WIDTH: u32 = 200;
     const HEIGHT: u32 = ((WIDTH as f64) / ASPECT_RATIO) as u32;
     const SAMPLE_PER_PIXCEL: u32 = 100;
     const MAX_DEPTH: u32 = 50;
 
     let mut world = HittableList::default();
-    let R = std::f64::consts::FRAC_PI_4.cos();
     world.add(Box::new(Sphere::new(
-        Vec3::new(-R, 0.0, -1.0),
-        R,
-        Box::new(Lambertian::new(Color::new(0.0, 0.0, 1.0))),
+        Vec3::new(0.0, 0.0, -1.0),
+        0.5,
+        Box::new(Lambertian::new(Color::new(0.1, 0.2, 0.5))),
     )));
     world.add(Box::new(Sphere::new(
-        Vec3::new(R, 0.0, -1.0),
-        R,
-        Box::new(Lambertian::new(Color::new(1.0, 0.0, 0.0))),
+        Vec3::new(0.0, -100.5, -1.0),
+        100.0,
+        Box::new(Lambertian::new(Color::new(0.8, 0.8, 0.0))),
     )));
-    // world.add(Box::new(Sphere::new(
-    //     Vec3::new(0.0, -100.5, -1.0),
-    //     100.0,
-    //     Box::new(Lambertian::new(Color::new(0.8, 0.8, 0.0))),
-    // )));
-
-    // world.add(Box::new(Sphere::new(
-    //     Vec3::new(1.0, 0.0, -1.0),
-    //     0.5,
-    //     Box::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.0)),
-    // )));
-    // world.add(Box::new(Sphere::new(
-    //     Vec3::new(-1.0, 0.0, -1.0),
-    //     0.5,
-    //     Box::new(Dielectric::new(1.5)),
-    // )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(1.0, 0.0, -1.0),
+        0.5,
+        Box::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.3)),
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(-1.0, 0.0, -1.0),
+        0.5,
+        Box::new(Dielectric::new(1.5)),
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(-1.0, 0.0, -1.0),
+        -0.45,
+        Box::new(Dielectric::new(1.5)),
+    )));
 
     let camera = Camera::new(
         Point::new(0.0, 0.0, 0.0),
