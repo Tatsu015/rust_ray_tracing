@@ -15,6 +15,7 @@ extern crate rand;
 
 use rand::Rng;
 
+use crate::vec3::Point;
 use camera::Camera;
 use color::write_color;
 use dielectric::Dielectric;
@@ -27,7 +28,36 @@ use sphere::Sphere;
 use std::io::Write;
 use vec3::{Color, Vec3};
 
-use crate::vec3::Point;
+fn random_scene() -> HittableList {
+    let mut world = HittableList::default();
+    world.add(Box::new(Sphere::new(
+        Vec3::new(0.0, 0.0, -1.0),
+        0.5,
+        Box::new(Lambertian::new(Color::new(0.1, 0.2, 0.5))),
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(0.0, -100.5, -1.0),
+        100.0,
+        Box::new(Lambertian::new(Color::new(0.8, 0.8, 0.0))),
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(1.0, 0.0, -1.0),
+        0.5,
+        Box::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.3)),
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(-1.0, 0.0, -1.0),
+        0.5,
+        Box::new(Dielectric::new(1.5)),
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(-1.0, 0.0, -1.0),
+        -0.45,
+        Box::new(Dielectric::new(1.5)),
+    )));
+
+    return world;
+}
 
 fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
     if depth <= 0 {
@@ -59,33 +89,6 @@ fn main() {
     const SAMPLE_PER_PIXCEL: u32 = 100;
     const MAX_DEPTH: u32 = 50;
 
-    let mut world = HittableList::default();
-    world.add(Box::new(Sphere::new(
-        Vec3::new(0.0, 0.0, -1.0),
-        0.5,
-        Box::new(Lambertian::new(Color::new(0.1, 0.2, 0.5))),
-    )));
-    world.add(Box::new(Sphere::new(
-        Vec3::new(0.0, -100.5, -1.0),
-        100.0,
-        Box::new(Lambertian::new(Color::new(0.8, 0.8, 0.0))),
-    )));
-    world.add(Box::new(Sphere::new(
-        Vec3::new(1.0, 0.0, -1.0),
-        0.5,
-        Box::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.3)),
-    )));
-    world.add(Box::new(Sphere::new(
-        Vec3::new(-1.0, 0.0, -1.0),
-        0.5,
-        Box::new(Dielectric::new(1.5)),
-    )));
-    world.add(Box::new(Sphere::new(
-        Vec3::new(-1.0, 0.0, -1.0),
-        -0.45,
-        Box::new(Dielectric::new(1.5)),
-    )));
-
     let lookfrom = Point::new(3.0, 3.0, 2.0);
     let lookat = Point::new(0.0, 0.0, -1.0);
     let vup = Vec3::new(0.0, 1.0, 0.0);
@@ -99,6 +102,8 @@ fn main() {
         2.0,
         (lookfrom - lookat).length(),
     );
+
+    let world = random_scene();
 
     println!("P3\n{} {}\n255", WIDTH, HEIGHT);
 
