@@ -6,5 +6,10 @@ pub fn write_color(pixcel_color: Color, sample_per_pixcel: u32) {
     let clamped = gammad.clamp(0.0, 1.0);
     let color = 256.0 * clamped;
 
-    println!("{} {} {}", color.x, color.y, color.z);
+    println!(
+        "{} {} {}",
+        color.x.round(),
+        color.y.round(),
+        color.z.round()
+    );
 }
