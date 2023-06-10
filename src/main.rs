@@ -14,11 +14,10 @@ mod vec3;
 extern crate rand;
 
 use rand::Rng;
-use std::time::Instant;
+use std::{fs::File, time::Instant};
 
-use crate::vec3::Point;
+use crate::{color::to_string, vec3::Point};
 use camera::Camera;
-use color::write_color;
 use dielectric::Dielectric;
 use hittable::Hittable;
 use hittable_list::HittableList;
@@ -147,7 +146,9 @@ fn main() {
 
     let world = random_scene();
 
-    println!("P3\n{} {}\n255", WIDTH, HEIGHT);
+    let mut buf: String;
+
+    buf = format!("P3\n{} {}\n255\n", WIDTH, HEIGHT);
 
     for i in (0..HEIGHT).rev() {
         eprint!("\rremain {:3}", i);
@@ -160,9 +161,18 @@ fn main() {
                 let ray = camera.get_ray(u, v);
                 pixcel_sum_color += ray_color(&ray, &world, MAX_DEPTH);
             }
-            write_color(pixcel_sum_color, SAMPLE_PER_PIXCEL);
+            let cs = to_string(pixcel_sum_color, SAMPLE_PER_PIXCEL);
+            buf.push_str(&cs);
         }
     }
+
+    let mut file = File::create("out.ppm").expect("Failed to create file");
+
+    file.write_all(buf.as_bytes())
+        .expect("Failed to write data to file");
+
+    file.flush().expect("Failed to flush data to file");
+
     let end = Instant::now();
     eprintln!("\rElapsed time: {:?}", end - start);
 }
