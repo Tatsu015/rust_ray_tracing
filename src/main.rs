@@ -14,6 +14,7 @@ mod vec3;
 extern crate rand;
 
 use rand::Rng;
+use std::time::Instant;
 
 use crate::vec3::Point;
 use camera::Camera;
@@ -120,10 +121,11 @@ fn ray_color(ray: &Ray, world: &HittableList, depth: u32) -> Color {
 }
 
 fn main() {
+    let start = Instant::now();
     let mut rng = rand::thread_rng();
 
     const ASPECT_RATIO: f64 = 16.0 / 9.0;
-    const WIDTH: u32 = 400;
+    const WIDTH: u32 = 200;
     const HEIGHT: u32 = ((WIDTH as f64) / ASPECT_RATIO) as u32;
     const SAMPLE_PER_PIXCEL: u32 = 100;
     const MAX_DEPTH: u32 = 50;
@@ -161,5 +163,6 @@ fn main() {
             write_color(pixcel_sum_color, SAMPLE_PER_PIXCEL);
         }
     }
-    eprintln!("DONE");
+    let end = Instant::now();
+    eprintln!("\rElapsed time: {:?}", end - start);
 }
